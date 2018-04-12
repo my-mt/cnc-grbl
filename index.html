@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css" type="text/css"/>
+
+        <title>Правка G кода для лазера</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://milankyncl.github.io/jquery-copy-to-clipboard/jquery.copy-to-clipboard.js"></script>
+    </head>
+    <body>
+        <style>
+            .main {
+                margin: 20px;
+            }
+            h2 {
+
+            }
+            table {
+                margin-top: 20px;
+            }
+            td {
+                vertical-align: top;
+                border: 1px #111 solid;
+                padding: 5px;
+            }
+            th {
+               border: 1px #111 solid;
+               padding: 10px;
+               width: 400px;
+            }
+
+            button {
+                margin: 5px 0;
+            }
+
+            textarea {
+                height: 100%;
+                border: none;
+                width: 100%;
+            }
+            pre {
+                margin: 0;
+            }
+
+        </style>
+        <div class="main">
+        <h2>Адаптация кода  ArtCam для GRBL</h2>
+        <p>Для адекватной работы, безопасная высота подъема должна быть 0.100, а финишный проход 0.000.</p>
+        <button id="btn-edit">Выполнить адаптацию для GRBL</button>
+
+        <table>
+            <tr>
+                <th>
+                    Исходный код из ArtCam
+                </th>
+
+                <th>
+                    Код, адаптированный для GRBL<br><button id="btn-copy">Скопировать в буфер</button>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <textarea rows="10" cols="45" name="text" id="start-text" placeholder="Сюда вставить код для адаптации"></textarea>
+                </td>
+
+                <td >
+                    <pre id="end-text">
+                    </pre>
+
+                </td>
+            </tr>
+        </table>
+
+        <script>
+            $('#btn-edit').click(function () {
+                var cnc = $('#start-text').val();
+                var laser = cnc.replace(/M3 S.+/g, "M3 S0");
+                laser = laser.replace(/Z0\.100/g, "Z0.100 S0");
+                laser = laser.replace(/Z0\.000/g, "Z0.000 S255");
+                $('#end-text').text(laser);
+                $('#start-text').height($('#end-text').height() + 30);
+            });
+
+            $('#btn-copy').click(function () {
+                $('#end-text').CopyToClipboard();
+
+            });
+        </script>
+    </div>
+    </body>
+</html>
